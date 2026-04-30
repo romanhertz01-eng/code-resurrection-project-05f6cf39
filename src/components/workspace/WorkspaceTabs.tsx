@@ -57,14 +57,15 @@ export function WorkspaceTabs({ variant = "standalone" }: WorkspaceTabsProps) {
                 isActive
                   ? {
                       height: 40,
-                      marginBottom: variant === "attached" ? -1 : 0,
+                      marginBottom: variant === "attached" ? -2 : 0,
+                      paddingBottom: variant === "attached" ? 2 : 0,
                       position: "relative",
                       zIndex: 2,
                       background: cardBg,
                       borderTop: `1px solid ${cardBorder}`,
                       borderLeft: `1px solid ${cardBorder}`,
                       borderRight: `1px solid ${cardBorder}`,
-                      borderBottom: activeBottomBorder,
+                      borderBottom: "none",
                       color: "var(--c-accent-2)",
                     }
                   : {

@@ -87,7 +87,7 @@ const AudioPage = () => {
         <WorkspaceTabs variant="attached" />
 
         {/* ─── Prompt Block ─── */}
-        <div className="rounded-[20px] p-6" style={{ background: "var(--bg-card)", border: "1px solid var(--border-primary)", minHeight: 140 }}>
+        <div className="rounded-[20px] rounded-tl-none p-6" style={{ background: "var(--bg-card)", border: "1px solid var(--border-primary)", minHeight: 140 }}>
           <textarea
             value={prompt}
             onChange={e => setPrompt(e.target.value)}
