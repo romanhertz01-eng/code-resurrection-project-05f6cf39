@@ -223,7 +223,7 @@ const VideoPage = () => {
       <div className="flex-1 overflow-y-auto px-4 lg:px-8 py-4 space-y-4 w-full">
         <div>
         <WorkspaceTabs variant="attached" />
-        <div className="rounded-[22px] rounded-tl-none border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-4 w-full transition-colors duration-200">
+        <div className="rounded-[22px] rounded-tl-none border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-4 w-full transition-all duration-200 has-[textarea:focus]:border-[hsl(var(--primary))] has-[textarea:focus]:shadow-[0_0_0_3px_rgba(232,84,32,0.12),0_1px_4px_rgba(0,0,0,0.2)]">
           <div className="flex items-start gap-3 mb-3">
             <AttachmentButton current={0} max={5} />
             <textarea
