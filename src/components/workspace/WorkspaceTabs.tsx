@@ -31,28 +31,20 @@ export function WorkspaceTabs({ variant = "standalone" }: WorkspaceTabsProps) {
   const { pathname } = useLocation();
   const activeId = PATH_TO_ID[pathname];
 
-  // Same border logic as PromptWindow.tsx
+  // Match PromptBlock surface and border exactly
+  const cardBg = "hsl(var(--card))";
   const cardBorder = "hsl(var(--border))";
-  const activeCardBorder = "color-mix(in oklab, var(--c-accent) 40%, transparent)";
-
-  const containerStyle: React.CSSProperties =
-    variant === "attached"
-      ? { marginBottom: -1, position: "relative", zIndex: 2 }
-      : { marginBottom: 0 };
 
   return (
     <div className="w-full">
-      <div
-        className="flex items-end gap-1 overflow-x-auto scrollbar-hide flex-nowrap justify-start"
-        style={containerStyle}
-      >
+      <div className="flex items-end gap-1 overflow-x-auto scrollbar-hide flex-nowrap justify-start">
         {TABS.map((t) => {
           const isActive = t.id === activeId;
           const { Icon } = t;
           const activeBottomBorder =
             variant === "attached"
-              ? "1px solid var(--c-bg-1)"
-              : "1px solid hsl(var(--border))";
+              ? `1px solid ${cardBg}`
+              : `1px solid ${cardBorder}`;
           return (
             <Link
               key={t.id}
@@ -65,19 +57,22 @@ export function WorkspaceTabs({ variant = "standalone" }: WorkspaceTabsProps) {
                 isActive
                   ? {
                       height: 40,
-                      background: "var(--c-bg-1)",
-                      borderTop: `1px solid ${activeCardBorder}`,
-                      borderLeft: `1px solid ${activeCardBorder}`,
-                      borderRight: `1px solid ${activeCardBorder}`,
+                      marginBottom: variant === "attached" ? -1 : 0,
+                      position: "relative",
+                      zIndex: 2,
+                      background: cardBg,
+                      borderTop: `1px solid ${cardBorder}`,
+                      borderLeft: `1px solid ${cardBorder}`,
+                      borderRight: `1px solid ${cardBorder}`,
                       borderBottom: activeBottomBorder,
                       color: "var(--c-accent-2)",
                     }
                   : {
                       height: 40,
                       background: "color-mix(in oklab, var(--c-bg-1) 92%, #000)",
-                      borderTop: "1px solid hsl(var(--border))",
-                      borderLeft: "1px solid hsl(var(--border))",
-                      borderRight: "1px solid hsl(var(--border))",
+                      borderTop: `1px solid ${cardBorder}`,
+                      borderLeft: `1px solid ${cardBorder}`,
+                      borderRight: `1px solid ${cardBorder}`,
                       borderBottom: `1px solid ${cardBorder}`,
                       color: "color-mix(in oklab, var(--c-fg-dim) 70%, transparent)",
                     }
