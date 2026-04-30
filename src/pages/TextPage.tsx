@@ -19,16 +19,6 @@ const demoReply = "Это демонстрационный ответ от AI-а
 
 const systemPromptPresets = ["Копирайтер", "Программист", "Учитель", "Переводчик"];
 
-// ERA2: все иконки в единой огненно-rust палитре, никаких случайных цветов
-const quickActionIcons: Record<string, { Icon: typeof PenLine }> = {
-  "📝": { Icon: PenLine },
-  "💡": { Icon: Lightbulb },
-  "💻": { Icon: Code },
-  "🌐": { Icon: Languages },
-  "🔍": { Icon: Search },
-  "📊": { Icon: BarChart3 },
-};
-
 // Theme-aware color tokens
 function useColors() {
   const { theme } = useTheme();
