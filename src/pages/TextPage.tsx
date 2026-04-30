@@ -5,6 +5,7 @@ import { TextModelSelector } from "@/components/text/TextModelSelector";
 import { ModelIcon } from "@/components/text/ModelIcon";
 import { cn } from "@/lib/utils";
 import { useTheme } from "@/contexts/ThemeContext";
+import { WorkspaceTabs } from "@/components/workspace/WorkspaceTabs";
 
 interface Message {
   id: string;
@@ -133,6 +134,9 @@ const TextPage = () => {
 
   return (
     <div className="flex flex-col h-[calc(100vh-56px)]" style={{ background: c.bg }}>
+      <div className="shrink-0 pt-2" style={{ background: c.bg }}>
+        <WorkspaceTabs variant="standalone" />
+      </div>
       {/* ─── Header bar ─── */}
       <div
         className="shrink-0 h-[52px] flex items-center justify-between px-4 z-10 border-b"
