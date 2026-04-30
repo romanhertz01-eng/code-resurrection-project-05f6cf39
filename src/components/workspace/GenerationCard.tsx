@@ -1,4 +1,7 @@
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import { formatDistanceToNow } from "date-fns";
+import { ru } from "date-fns/locale";
 import { Copy, Download, RefreshCw, MoreHorizontal, Play, Zap } from "lucide-react";
 import { ModelIcon } from "@/components/text/ModelIcon";
 import type { Generation } from "@/data/mockGenerations";
@@ -65,6 +68,17 @@ export function GenerationCard({ generation }: Props) {
   const { type, providerId, modelName, credits, prompt, createdAt, text, gradient, aspect, duration } =
     generation;
 
+  const [relative, setRelative] = useState(() =>
+    formatDistanceToNow(createdAt, { addSuffix: true, locale: ru }),
+  );
+  useEffect(() => {
+    const tick = () =>
+      setRelative(formatDistanceToNow(createdAt, { addSuffix: true, locale: ru }));
+    tick();
+    const id = setInterval(tick, 30_000);
+    return () => clearInterval(id);
+  }, [createdAt]);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 12 }}
@@ -77,7 +91,7 @@ export function GenerationCard({ generation }: Props) {
         <ModelIcon providerId={providerId} size={22} />
         <span className="text-sm font-medium text-foreground">{modelName}</span>
         <span className="text-muted-foreground text-xs">·</span>
-        <span className="text-xs text-muted-foreground">{createdAt}</span>
+        <span className="text-xs text-muted-foreground">{relative}</span>
         <span
           className="ml-auto inline-flex items-center gap-1 font-mono tabular-nums text-[11px] px-2 py-0.5 rounded-full"
           style={{

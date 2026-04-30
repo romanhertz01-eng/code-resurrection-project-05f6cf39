@@ -2,7 +2,6 @@ import { useNavigate } from "@tanstack/react-router";
 import { ArrowUpRight } from "lucide-react";
 import { StatusBadge } from "@/components/ui/era";
 import type { SearchableModel } from "@/config/searchableModels";
-import { modelTypeToRoute } from "@/config/searchableModels";
 import { cn } from "@/lib/utils";
 
 const brandColors: Record<string, string> = {

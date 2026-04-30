@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { getRouteApi } from "@tanstack/react-router";
-import { Sparkles } from "lucide-react";
+import { Sparkles, Users } from "lucide-react";
 import { WorkspaceTopTabs, type WorkspaceTopTab } from "@/components/workspace/WorkspaceTopTabs";
 import { GenerationCard } from "@/components/workspace/GenerationCard";
 import { WorkspacePromptBar, type GenType } from "@/components/workspace/WorkspacePromptBar";
@@ -24,13 +24,40 @@ function buildInitialFeed(type: GenType, seedPrompt: string): Generation[] {
     modelName: m.modelName,
     credits: m.credits,
     prompt: seedPrompt,
-    createdAt: "только что",
+    createdAt: new Date(),
     text: type === "text" ? "Готово. Это пример сгенерированного ответа на ваш запрос." : undefined,
     gradient: type === "image" || type === "video" ? gradientForType(type) : undefined,
     aspect: type === "image" ? "1:1" : type === "video" ? "16:9" : undefined,
     duration: type === "video" ? "5s" : type === "audio" ? "1:24" : undefined,
   };
   return [seed, ...base];
+}
+
+function EmptyTile({
+  Icon,
+  title,
+  subtitle,
+}: {
+  Icon: typeof Sparkles;
+  title: string;
+  subtitle: string;
+}) {
+  return (
+    <div className="flex flex-col items-center justify-center text-center py-24">
+      <div
+        className="w-14 h-14 rounded-2xl flex items-center justify-center mb-4"
+        style={{
+          background: "rgba(232,84,32,0.08)",
+          color: "hsl(var(--primary))",
+          border: "1px solid color-mix(in oklab, hsl(var(--primary)) 25%, transparent)",
+        }}
+      >
+        <Icon size={24} strokeWidth={1.8} />
+      </div>
+      <h2 className="text-xl font-semibold text-foreground mb-1.5">{title}</h2>
+      <p className="text-sm text-muted-foreground">{subtitle}</p>
+    </div>
+  );
 }
 
 export default function CreatePage() {
@@ -60,7 +87,7 @@ export default function CreatePage() {
       modelName: m.modelName,
       credits: m.credits,
       prompt: text,
-      createdAt: "только что",
+      createdAt: new Date(),
       text: type === "text" ? "Готово. Это пример сгенерированного ответа на ваш запрос." : undefined,
       gradient: type === "image" || type === "video" ? gradientForType(type) : undefined,
       aspect: type === "image" ? "1:1" : type === "video" ? "16:9" : undefined,
@@ -71,22 +98,7 @@ export default function CreatePage() {
   };
 
   const emptyState = useMemo(
-    () => (
-      <div className="flex flex-col items-center justify-center text-center py-24">
-        <div
-          className="w-14 h-14 rounded-2xl flex items-center justify-center mb-4"
-          style={{
-            background: "var(--c-accent-soft)",
-            color: "hsl(var(--primary))",
-            border: "1px solid color-mix(in oklab, hsl(var(--primary)) 25%, transparent)",
-          }}
-        >
-          <Sparkles size={24} strokeWidth={1.8} />
-        </div>
-        <h2 className="text-xl font-semibold text-foreground mb-1.5">Опиши идею ниже</h2>
-        <p className="text-sm text-muted-foreground">Результаты появятся здесь.</p>
-      </div>
-    ),
+    () => <EmptyTile Icon={Sparkles} title="Опиши идею ниже" subtitle="Результаты появятся здесь." />,
     [],
   );
 
@@ -102,8 +114,12 @@ export default function CreatePage() {
               : feed.map((g) => <GenerationCard key={g.id} generation={g} />)}
           </div>
         ) : (
-          <div className="max-w-[920px] mx-auto py-16 px-4 text-center text-muted-foreground">
-            Лента сообщества скоро.
+          <div className="max-w-[920px] mx-auto px-4 py-6 pb-[220px]">
+            <EmptyTile
+              Icon={Users}
+              title="Лента сообщества скоро"
+              subtitle="Здесь появятся лучшие генерации пользователей ERA2."
+            />
           </div>
         )}
       </div>
