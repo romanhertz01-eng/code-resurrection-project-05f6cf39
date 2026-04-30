@@ -81,28 +81,48 @@ export function TwoPanelModelSelector({
   providers, selectedProviderId, selectedSubModelId, onSelect,
 }: TwoPanelModelSelectorProps) {
   const [open, setOpen] = useState(false);
-  const [openUpward, setOpenUpward] = useState(false);
+  const [pos, setPos] = useState<{ left: number; top?: number; bottom?: number }>({ left: 0, top: 0 });
   const [activeProvider, setActiveProvider] = useState(selectedProviderId);
   const ref = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
+  const popupRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!open) return;
     const handler = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+      const t = e.target as Node;
+      if (ref.current?.contains(t)) return;
+      if (popupRef.current?.contains(t)) return;
+      setOpen(false);
     };
     document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
   }, [open]);
 
-  // Decide direction based on available space below the trigger
+  // Position dropdown via fixed coords (escapes overflow:hidden parents)
   useEffect(() => {
     if (!open || !triggerRef.current) return;
-    const rect = triggerRef.current.getBoundingClientRect();
-    const spaceBelow = window.innerHeight - rect.bottom;
-    const spaceAbove = rect.top;
-    const dropdownH = 420 + 8;
-    setOpenUpward(spaceBelow < dropdownH && spaceAbove > spaceBelow);
+    const compute = () => {
+      const rect = triggerRef.current!.getBoundingClientRect();
+      const dropdownH = 420 + 8;
+      const spaceBelow = window.innerHeight - rect.bottom;
+      const spaceAbove = rect.top;
+      const upward = spaceBelow < dropdownH && spaceAbove > spaceBelow;
+      const width = 640;
+      const left = Math.min(Math.max(8, rect.left), window.innerWidth - width - 8);
+      if (upward) {
+        setPos({ left, bottom: window.innerHeight - rect.top + 4 });
+      } else {
+        setPos({ left, top: rect.bottom + 4 });
+      }
+    };
+    compute();
+    window.addEventListener("resize", compute);
+    window.addEventListener("scroll", compute, true);
+    return () => {
+      window.removeEventListener("resize", compute);
+      window.removeEventListener("scroll", compute, true);
+    };
   }, [open]);
 
   useEffect(() => { setActiveProvider(selectedProviderId); }, [selectedProviderId]);
