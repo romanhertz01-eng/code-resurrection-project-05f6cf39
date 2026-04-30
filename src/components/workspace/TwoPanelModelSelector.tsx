@@ -81,8 +81,10 @@ export function TwoPanelModelSelector({
   providers, selectedProviderId, selectedSubModelId, onSelect,
 }: TwoPanelModelSelectorProps) {
   const [open, setOpen] = useState(false);
+  const [openUpward, setOpenUpward] = useState(false);
   const [activeProvider, setActiveProvider] = useState(selectedProviderId);
   const ref = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     if (!open) return;
@@ -91,6 +93,16 @@ export function TwoPanelModelSelector({
     };
     document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
+  }, [open]);
+
+  // Decide direction based on available space below the trigger
+  useEffect(() => {
+    if (!open || !triggerRef.current) return;
+    const rect = triggerRef.current.getBoundingClientRect();
+    const spaceBelow = window.innerHeight - rect.bottom;
+    const spaceAbove = rect.top;
+    const dropdownH = 420 + 8;
+    setOpenUpward(spaceBelow < dropdownH && spaceAbove > spaceBelow);
   }, [open]);
 
   useEffect(() => { setActiveProvider(selectedProviderId); }, [selectedProviderId]);
@@ -105,6 +117,7 @@ export function TwoPanelModelSelector({
         const PillIcon = getModelIcon(currentProvider?.name || "");
         return (
           <button
+            ref={triggerRef}
             onClick={() => setOpen(!open)}
             className="inline-flex items-center gap-1.5 h-9 px-3 rounded-full text-[13px] whitespace-nowrap transition-colors"
             style={{ background: "var(--bg-pill)", color: "var(--text-primary)", border: "1px solid var(--border-primary)" }}
@@ -117,8 +130,9 @@ export function TwoPanelModelSelector({
       })()}
       {open && (
         <div
-          className="absolute top-full left-0 mt-1 z-50 flex flex-col overflow-hidden"
+          className="absolute left-0 z-50 flex flex-col overflow-hidden"
           style={{
+            ...(openUpward ? { bottom: "100%", marginBottom: 4 } : { top: "100%", marginTop: 4 }),
             width: 640,
             maxHeight: 420,
             background: "var(--bg-popup)",
