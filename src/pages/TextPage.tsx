@@ -19,16 +19,6 @@ const demoReply = "Это демонстрационный ответ от AI-а
 
 const systemPromptPresets = ["Копирайтер", "Программист", "Учитель", "Переводчик"];
 
-// ERA2: все иконки в единой огненно-rust палитре, никаких случайных цветов
-const quickActionIcons: Record<string, { Icon: typeof PenLine }> = {
-  "📝": { Icon: PenLine },
-  "💡": { Icon: Lightbulb },
-  "💻": { Icon: Code },
-  "🌐": { Icon: Languages },
-  "🔍": { Icon: Search },
-  "📊": { Icon: BarChart3 },
-};
-
 // Theme-aware color tokens
 function useColors() {
   const { theme } = useTheme();
@@ -316,32 +306,25 @@ function WelcomeScreen({ providerId, providerName, subModelName, onQuickAction, 
         <p className="text-[14px] mb-8" style={{ color: c.textTertiary }}>Единый доступ к 90+ нейросетям</p>
 
         <div className="grid grid-cols-2 md:grid-cols-3 gap-3 w-full">
-          {textQuickActions.map((action) => {
-            const iconCfg = quickActionIcons[action.emoji];
-            return (
-              <button
-                key={action.title}
-                onClick={() => onQuickAction(action.prompt)}
-                className="group p-4 rounded-[16px] text-left transition-all"
-                style={{ background: c.cardBg, border: `1px solid ${c.cardBorder}` }}
-                onMouseEnter={(e) => { e.currentTarget.style.borderColor = c.cardBorderHover; e.currentTarget.style.background = c.cardBgHover; }}
-                onMouseLeave={(e) => { e.currentTarget.style.borderColor = c.cardBorder; e.currentTarget.style.background = c.cardBg; }}
+          {textQuickActions.map((action) => (
+            <button
+              key={action.title}
+              onClick={() => onQuickAction(action.prompt)}
+              className="group p-4 rounded-[16px] text-left transition-all"
+              style={{ background: c.cardBg, border: `1px solid ${c.cardBorder}` }}
+              onMouseEnter={(e) => { e.currentTarget.style.borderColor = c.cardBorderHover; e.currentTarget.style.background = c.cardBgHover; }}
+              onMouseLeave={(e) => { e.currentTarget.style.borderColor = c.cardBorder; e.currentTarget.style.background = c.cardBg; }}
+            >
+              <div
+                className="w-9 h-9 rounded-full flex items-center justify-center mb-2.5"
+                style={{ background: "rgba(232, 84, 32, 0.12)" }}
               >
-                {iconCfg ? (
-                  <div
-                    className="w-9 h-9 rounded-full flex items-center justify-center mb-2.5"
-                    style={{ background: "rgba(232, 84, 32, 0.12)" }}
-                  >
-                    <iconCfg.Icon className="w-[18px] h-[18px]" style={{ color: "hsl(var(--primary))" }} />
-                  </div>
-                ) : (
-                  <span className="text-[22px] mb-2 block">{action.emoji}</span>
-                )}
-                <div className="text-[15px] font-semibold mb-0.5" style={{ color: c.textPrimary }}>{action.title}</div>
-                <div className="text-[13px] leading-snug line-clamp-1" style={{ color: c.textSecondary }}>{action.description}</div>
-              </button>
-            );
-          })}
+                <action.Icon className="w-[18px] h-[18px]" style={{ color: "hsl(var(--primary))" }} />
+              </div>
+              <div className="text-[15px] font-semibold mb-0.5" style={{ color: c.textPrimary }}>{action.title}</div>
+              <div className="text-[13px] leading-snug line-clamp-1" style={{ color: c.textSecondary }}>{action.description}</div>
+            </button>
+          ))}
         </div>
       </div>
     </div>

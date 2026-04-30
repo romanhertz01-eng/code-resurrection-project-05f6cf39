@@ -1,19 +1,21 @@
+import { ModelGlyph } from "@/components/ui/era/ModelGlyph";
+
 const models = [
-  { name: "ChatGPT", icon: "🤖" },
-  { name: "Claude", icon: "💜" },
-  { name: "Gemini", icon: "💎" },
-  { name: "MidJourney", icon: "⛵" },
-  { name: "Nano Banana", icon: "🍌" },
-  { name: "Sora", icon: "🎬" },
-  { name: "Kling", icon: "🎥" },
-  { name: "Seedance", icon: "💃" },
-  { name: "Veo", icon: "🌊" },
-  { name: "Flux", icon: "✨" },
-  { name: "ElevenLabs", icon: "🎙" },
-  { name: "Suno", icon: "🎵" },
-  { name: "DeepSeek", icon: "🔍" },
-  { name: "Grok", icon: "⚡" },
-  { name: "Perplexity", icon: "🔮" },
+  { name: "ChatGPT" },
+  { name: "Claude" },
+  { name: "Gemini" },
+  { name: "MidJourney" },
+  { name: "Nano Banana" },
+  { name: "Sora" },
+  { name: "Kling" },
+  { name: "Seedance" },
+  { name: "Veo" },
+  { name: "Flux" },
+  { name: "ElevenLabs" },
+  { name: "Suno" },
+  { name: "DeepSeek" },
+  { name: "Grok" },
+  { name: "Perplexity" },
 ];
 
 export function ModelsMarquee() {
@@ -24,9 +26,7 @@ export function ModelsMarquee() {
           <div key={dup} className="inline-flex items-center" style={{ gap: 32 }}>
             {models.map((m) => (
               <div key={m.name + dup} className="flex items-center" style={{ gap: 8 }}>
-                <div className="flex items-center justify-center" style={{ width: 28, height: 28, borderRadius: "50%", background: "rgba(255,255,255,0.06)", fontSize: 14 }}>
-                  {m.icon}
-                </div>
+                <ModelGlyph name={m.name} size={28} />
                 <span style={{ fontSize: 14, fontWeight: 500, color: "var(--seo-text-muted)", whiteSpace: "nowrap" }}>{m.name}</span>
               </div>
             ))}

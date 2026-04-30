@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
-import { ChevronDown, Play, Plus, Zap, Settings2 } from "lucide-react";
+import { ChevronDown, Play, Plus, Zap, Settings2, Smartphone, Film, Mic, Sparkles, Megaphone, Headphones, Globe, Music } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { PillDropdown } from "@/components/workspace/PillDropdown";
 import { WorkspaceTabs } from "@/components/workspace/WorkspaceTabs";
+import { ModelGlyph } from "@/components/ui/era/ModelGlyph";
 
 /* ─── Voice data ─── */
 const voices = [
@@ -39,17 +40,17 @@ const sunoPromptChips = [
 ];
 
 const elevenScenarios = [
-  { emoji: "🎙", label: "Озвучка видео" },
-  { emoji: "📢", label: "Реклама" },
-  { emoji: "🎧", label: "Подкасты" },
-  { emoji: "🌍", label: "Локализация" },
+  { Icon: Mic, label: "Озвучка видео" },
+  { Icon: Megaphone, label: "Реклама" },
+  { Icon: Headphones, label: "Подкасты" },
+  { Icon: Globe, label: "Локализация" },
 ];
 
 const sunoScenarios = [
-  { emoji: "🎵", label: "Музыка для видео" },
-  { emoji: "📱", label: "Треки для Reels" },
-  { emoji: "🎬", label: "Саундтреки" },
-  { emoji: "🎤", label: "Песни с вокалом" },
+  { Icon: Music, label: "Музыка для видео" },
+  { Icon: Smartphone, label: "Треки для Reels" },
+  { Icon: Film, label: "Саундтреки" },
+  { Icon: Mic, label: "Песни с вокалом" },
 ];
 
 const AudioPage = () => {
@@ -245,7 +246,9 @@ const AudioPage = () => {
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                 {elevenScenarios.map(s => (
                   <div key={s.label} className="rounded-xl p-5 flex flex-col items-center gap-2 cursor-pointer transition-colors" style={{ background: "var(--bg-card)", border: "1px solid var(--border-primary)" }}>
-                    <span className="text-[28px]">{s.emoji}</span>
+                    <div className="w-10 h-10 rounded-[10px] flex items-center justify-center" style={{ background: "rgba(232, 84, 32, 0.1)", border: "1px solid rgba(232, 84, 32, 0.18)" }}>
+                      <s.Icon size={20} strokeWidth={1.75} style={{ color: "hsl(var(--primary))" }} />
+                    </div>
                     <span className="text-[13px] font-semibold text-foreground">{s.label}</span>
                   </div>
                 ))}
@@ -316,7 +319,9 @@ const AudioPage = () => {
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                 {sunoScenarios.map(s => (
                   <div key={s.label} className="rounded-xl p-5 flex flex-col items-center gap-2 cursor-pointer transition-colors" style={{ background: "var(--bg-card)", border: "1px solid var(--border-primary)" }}>
-                    <span className="text-[28px]">{s.emoji}</span>
+                    <div className="w-10 h-10 rounded-[10px] flex items-center justify-center" style={{ background: "rgba(232, 84, 32, 0.1)", border: "1px solid rgba(232, 84, 32, 0.18)" }}>
+                      <s.Icon size={20} strokeWidth={1.75} style={{ color: "hsl(var(--primary))" }} />
+                    </div>
                     <span className="text-[13px] font-semibold text-foreground">{s.label}</span>
                   </div>
                 ))}
@@ -330,8 +335,8 @@ const AudioPage = () => {
           <h2 className="text-lg font-bold text-foreground mt-10 mb-5">Модели</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {[
-              { id: "elevenlabs" as const, icon: "🔊", name: "ElevenLabs", desc: "Озвучка текста и клонирование голоса", credits: 60 },
-              { id: "suno" as const, icon: "🎵", name: "Suno", desc: "Генерация музыки по описанию", credits: 30 },
+              { id: "elevenlabs" as const, name: "ElevenLabs", desc: "Озвучка текста и клонирование голоса", credits: 60 },
+              { id: "suno" as const, name: "Suno", desc: "Генерация музыки по описанию", credits: 30 },
             ].map(m => (
               <button
                 key={m.id}
@@ -344,7 +349,7 @@ const AudioPage = () => {
                 )}
                 style={selectedModel !== m.id ? { background: "var(--bg-card)", borderColor: "var(--border-primary)" } : undefined}
               >
-                <span className="text-2xl">{m.icon}</span>
+                <ModelGlyph name={m.name} size={40} />
                 <div className="flex-1 min-w-0">
                   <div className="text-sm font-semibold text-foreground">{m.name}</div>
                   <div className="text-[13px] text-muted-foreground">{m.desc}</div>
