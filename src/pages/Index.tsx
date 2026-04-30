@@ -18,6 +18,7 @@ import { ModelsMarquee } from "@/components/home/ModelsMarquee";
 import { QuickActions } from "@/components/home/QuickActions";
 import { HomeHowItWorks } from "@/components/home/HomeHowItWorks";
 import { HomeShowcase } from "@/components/home/HomeShowcase";
+import { PopularToolsSection } from "@/components/home/PopularToolsSection";
 
 const fadeUp = { hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0, transition: { duration: 0.5 } } };
 const stagger = { show: { transition: { staggerChildren: 0.08 } } };
@@ -110,6 +111,8 @@ const Index = () => {
 
       <ModelsMarquee />
       <QuickActions />
+
+      {!isAuthed && <PopularToolsSection />}
 
       <DesignCreativitySection />
       <AllModelsSection />
