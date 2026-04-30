@@ -150,9 +150,11 @@ export function TwoPanelModelSelector({
       })()}
       {open && (
         <div
-          className="absolute left-0 z-50 flex flex-col overflow-hidden"
+          ref={popupRef}
+          className="fixed z-[100] flex flex-col overflow-hidden"
           style={{
-            ...(openUpward ? { bottom: "100%", marginBottom: 4 } : { top: "100%", marginTop: 4 }),
+            left: pos.left,
+            ...(pos.top !== undefined ? { top: pos.top } : { bottom: pos.bottom }),
             width: 640,
             maxHeight: 420,
             background: "var(--bg-popup)",
