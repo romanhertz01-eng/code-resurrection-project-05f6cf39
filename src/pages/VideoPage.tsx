@@ -221,6 +221,7 @@ const VideoPage = () => {
     <div className="flex flex-col min-h-[calc(100vh-56px)]">
 
       <div className="flex-1 overflow-y-auto px-4 lg:px-8 py-4 space-y-4 w-full">
+        <div>
         <WorkspaceTabs variant="attached" />
         <div className="rounded-[22px] border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-4 w-full transition-colors duration-200 focus-within:border-[hsl(var(--primary))] focus-within:ring-2 focus-within:ring-[hsl(var(--primary))]/20">
           <div className="flex items-start gap-3 mb-3">
@@ -260,6 +261,7 @@ const VideoPage = () => {
               </span>
             </button>
           </div>
+        </div>
         </div>
 
         <PromptSuggestions suggestions={videoPromptSuggestions} onSelect={setPrompt} />
