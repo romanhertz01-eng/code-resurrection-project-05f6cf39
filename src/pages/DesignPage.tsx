@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 
 import { PromptBlock } from "@/components/workspace/ImagePromptBlock";
+import { WorkspaceTabs } from "@/components/workspace/WorkspaceTabs";
 import { PromptSuggestions } from "@/components/workspace/PromptSuggestions";
 import { ModelCarousel } from "@/components/workspace/ModelCarousel";
 import { ScenariosCarousel } from "@/components/workspace/ScenariosCarousel";
@@ -75,6 +76,7 @@ const DesignPage = () => {
   return (
     <div className="flex flex-col min-h-[calc(100vh-56px)]">
       <div className="flex-1 overflow-y-auto px-4 lg:px-8 py-4 space-y-4 w-full">
+        <WorkspaceTabs variant="attached" />
         <PromptBlock
           prompt={prompt}
           onPromptChange={setPrompt}
