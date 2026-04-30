@@ -166,6 +166,7 @@ const AudioPage = () => {
             </button>
           </div>
         </div>
+        </div>
 
         {/* ─── ElevenLabs content ─── */}
         {isEL && (
