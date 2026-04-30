@@ -51,20 +51,51 @@ function ParamPill({
   mono?: boolean;
 }) {
   const [open, setOpen] = useState(false);
+  const [pos, setPos] = useState<{ left: number; top?: number; bottom?: number; width: number }>({ left: 0, top: 0, width: 180 });
   const ref = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const popupRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!open) return;
     const h = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+      const target = e.target as Node;
+      if (ref.current?.contains(target)) return;
+      if (popupRef.current?.contains(target)) return;
+      setOpen(false);
     };
     document.addEventListener("mousedown", h);
     return () => document.removeEventListener("mousedown", h);
   }, [open]);
 
+  useEffect(() => {
+    if (!open || !triggerRef.current) return;
+    const compute = () => {
+      const rect = triggerRef.current!.getBoundingClientRect();
+      const width = Math.max(180, Math.ceil(rect.width));
+      const height = Math.min(options.length * 38 + 8, 320);
+      const spaceBelow = window.innerHeight - rect.bottom;
+      const spaceAbove = rect.top;
+      const left = Math.min(Math.max(8, rect.left), window.innerWidth - width - 8);
+      if (spaceBelow < height + 8 && spaceAbove > spaceBelow) {
+        setPos({ left, bottom: window.innerHeight - rect.top + 6, width });
+      } else {
+        setPos({ left, top: rect.bottom + 6, width });
+      }
+    };
+    compute();
+    window.addEventListener("resize", compute);
+    window.addEventListener("scroll", compute, true);
+    return () => {
+      window.removeEventListener("resize", compute);
+      window.removeEventListener("scroll", compute, true);
+    };
+  }, [open, options.length]);
+
   return (
     <div ref={ref} className="relative shrink-0">
       <button
+        ref={triggerRef}
         type="button"
         onClick={() => setOpen(!open)}
         className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-[13px] font-medium transition-colors whitespace-nowrap"
@@ -88,8 +119,13 @@ function ParamPill({
       </button>
       {open && (
         <div
-          className="absolute top-full left-0 mt-1.5 min-w-[180px] rounded-[14px] shadow-xl z-50 p-1"
+          ref={popupRef}
+          className="fixed rounded-[14px] shadow-xl z-[100] p-1 overflow-y-auto"
           style={{
+            left: pos.left,
+            ...(pos.top !== undefined ? { top: pos.top } : { bottom: pos.bottom }),
+            width: pos.width,
+            maxHeight: 320,
             background: "var(--c-bg-1)",
             border: "1px solid var(--c-line-2)",
           }}
