@@ -83,6 +83,7 @@ const AudioPage = () => {
     <div className="flex flex-col min-h-[calc(100vh-56px)]">
       <div className="flex-1 overflow-y-auto px-4 lg:px-8 py-6 space-y-8 w-full">
 
+        <div>
         <WorkspaceTabs variant="attached" />
 
         {/* ─── Prompt Block ─── */}
@@ -164,6 +165,7 @@ const AudioPage = () => {
               <Plus size={14} /> Генерировать <Zap size={12} /> {isEL ? 60 : 30}
             </button>
           </div>
+        </div>
         </div>
 
         {/* ─── ElevenLabs content ─── */}

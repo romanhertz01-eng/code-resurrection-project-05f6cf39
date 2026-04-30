@@ -134,9 +134,6 @@ const TextPage = () => {
 
   return (
     <div className="flex flex-col h-[calc(100vh-56px)]" style={{ background: c.bg }}>
-      <div className="shrink-0 pt-2" style={{ background: c.bg }}>
-        <WorkspaceTabs variant="standalone" />
-      </div>
       {/* ─── Header bar ─── */}
       <div
         className="shrink-0 h-[52px] flex items-center justify-between px-4 z-10 border-b"
@@ -188,8 +185,9 @@ const TextPage = () => {
       {/* ─── Input area ─── */}
       <div className="shrink-0 px-4 pb-5 pt-2" style={{ background: c.bg }}>
         <div className="max-w-[780px] mx-auto">
+          <WorkspaceTabs variant="attached" />
           <div
-            className="rounded-2xl p-4 transition-all duration-200"
+            className="rounded-2xl rounded-tl-none p-4 transition-all duration-200"
             style={{
               background: c.inputBg,
               border: inputFocused ? `1px solid ${c.inputBorderFocus}` : `1px solid ${c.inputBorder}`,

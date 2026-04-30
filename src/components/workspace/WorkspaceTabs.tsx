@@ -32,7 +32,7 @@ export function WorkspaceTabs({ variant = "standalone" }: WorkspaceTabsProps) {
   const activeId = PATH_TO_ID[pathname];
 
   // Same border logic as PromptWindow.tsx
-  const cardBorder = "var(--c-line-2)";
+  const cardBorder = "hsl(var(--border))";
   const activeCardBorder = "color-mix(in oklab, var(--c-accent) 40%, transparent)";
 
   const containerStyle: React.CSSProperties =
@@ -41,7 +41,7 @@ export function WorkspaceTabs({ variant = "standalone" }: WorkspaceTabsProps) {
       : { marginBottom: 0 };
 
   return (
-    <div className="w-full max-w-[880px] mx-auto px-1">
+    <div className="w-full">
       <div
         className="flex items-end gap-1 overflow-x-auto scrollbar-hide flex-nowrap justify-start"
         style={containerStyle}
@@ -52,7 +52,7 @@ export function WorkspaceTabs({ variant = "standalone" }: WorkspaceTabsProps) {
           const activeBottomBorder =
             variant === "attached"
               ? "1px solid var(--c-bg-1)"
-              : "1px solid var(--c-line)";
+              : "1px solid hsl(var(--border))";
           return (
             <Link
               key={t.id}
@@ -75,9 +75,9 @@ export function WorkspaceTabs({ variant = "standalone" }: WorkspaceTabsProps) {
                   : {
                       height: 40,
                       background: "color-mix(in oklab, var(--c-bg-1) 92%, #000)",
-                      borderTop: "1px solid var(--c-line)",
-                      borderLeft: "1px solid var(--c-line)",
-                      borderRight: "1px solid var(--c-line)",
+                      borderTop: "1px solid hsl(var(--border))",
+                      borderLeft: "1px solid hsl(var(--border))",
+                      borderRight: "1px solid hsl(var(--border))",
                       borderBottom: `1px solid ${cardBorder}`,
                       color: "color-mix(in oklab, var(--c-fg-dim) 70%, transparent)",
                     }

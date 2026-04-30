@@ -76,24 +76,26 @@ const DesignPage = () => {
   return (
     <div className="flex flex-col min-h-[calc(100vh-56px)]">
       <div className="flex-1 overflow-y-auto px-4 lg:px-8 py-4 space-y-4 w-full">
-        <WorkspaceTabs variant="attached" />
-        <PromptBlock
-          prompt={prompt}
-          onPromptChange={setPrompt}
-          providers={imageProviders}
-          selectedProviderId={selectedProviderId}
-          selectedSubModelId={selectedSubModelId}
-          onModelSelect={handleModelSelect}
-          aspectRatio={aspectRatio}
-          onAspectSelect={setAspectRatio}
-          quantity={quantity}
-          onQuantityChange={setQuantity}
-          quality={quality}
-          onQualityChange={setQuality}
-          turbo={turbo}
-          onTurboToggle={() => setTurbo(!turbo)}
-          onGenerate={() => {}}
-        />
+        <div>
+          <WorkspaceTabs variant="attached" />
+          <PromptBlock
+            prompt={prompt}
+            onPromptChange={setPrompt}
+            providers={imageProviders}
+            selectedProviderId={selectedProviderId}
+            selectedSubModelId={selectedSubModelId}
+            onModelSelect={handleModelSelect}
+            aspectRatio={aspectRatio}
+            onAspectSelect={setAspectRatio}
+            quantity={quantity}
+            onQuantityChange={setQuantity}
+            quality={quality}
+            onQualityChange={setQuality}
+            turbo={turbo}
+            onTurboToggle={() => setTurbo(!turbo)}
+            onGenerate={() => {}}
+          />
+        </div>
 
         <PromptSuggestions suggestions={imagePromptSuggestions} onSelect={setPrompt} />
         <ModelCarousel models={carouselModels} onSelect={handleCarouselSelect} />
