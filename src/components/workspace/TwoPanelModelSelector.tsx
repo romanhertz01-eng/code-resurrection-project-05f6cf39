@@ -117,6 +117,7 @@ export function TwoPanelModelSelector({
         const PillIcon = getModelIcon(currentProvider?.name || "");
         return (
           <button
+            ref={triggerRef}
             onClick={() => setOpen(!open)}
             className="inline-flex items-center gap-1.5 h-9 px-3 rounded-full text-[13px] whitespace-nowrap transition-colors"
             style={{ background: "var(--bg-pill)", color: "var(--text-primary)", border: "1px solid var(--border-primary)" }}
@@ -129,8 +130,9 @@ export function TwoPanelModelSelector({
       })()}
       {open && (
         <div
-          className="absolute top-full left-0 mt-1 z-50 flex flex-col overflow-hidden"
+          className="absolute left-0 z-50 flex flex-col overflow-hidden"
           style={{
+            ...(openUpward ? { bottom: "100%", marginBottom: 4 } : { top: "100%", marginTop: 4 }),
             width: 640,
             maxHeight: 420,
             background: "var(--bg-popup)",
