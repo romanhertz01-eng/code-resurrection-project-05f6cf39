@@ -7,21 +7,56 @@ export interface Generation {
   modelName: string;
   credits: number;
   prompt: string;
-  createdAt: string; // human-readable relative time
+  createdAt: Date;
   text?: string;
   gradient?: string;
   aspect?: "1:1" | "16:9" | "9:16" | "4:3";
   duration?: string;
 }
 
-const GRADIENTS = {
-  hero: "radial-gradient(120% 90% at 25% 20%, rgba(255,122,61,0.55) 0%, rgba(232,84,32,0.35) 35%, rgba(40,22,18,0.85) 75%, #1a0f0c 100%)",
-  ember: "linear-gradient(135deg, rgba(232,84,32,0.65) 0%, rgba(255,122,61,0.35) 50%, #2a1410 100%)",
-  smoke: "radial-gradient(80% 60% at 70% 30%, rgba(255,122,61,0.4) 0%, rgba(120,40,20,0.5) 45%, #14080a 100%)",
-  amber: "linear-gradient(160deg, #2a1410 0%, rgba(232,84,32,0.5) 50%, rgba(255,180,90,0.4) 100%)",
-  dusk: "radial-gradient(100% 70% at 50% 100%, rgba(255,122,61,0.5) 0%, rgba(80,30,20,0.7) 50%, #0f0807 100%)",
-  flare: "linear-gradient(45deg, rgba(232,84,32,0.7) 0%, rgba(255,160,80,0.4) 60%, #1a0a08 100%)",
-};
+// Warm coal + fiery orange gradient pool. Variety in angle, type, stops, depth.
+export const WARM_GRADIENTS: string[] = [
+  // radial top-left ember
+  "radial-gradient(120% 90% at 25% 20%, rgba(255,122,61,0.65) 0%, rgba(232,84,32,0.4) 35%, rgba(40,22,18,0.9) 75%, #1a0f0c 100%)",
+  // diagonal flare
+  "linear-gradient(135deg, #3a1a0a 0%, rgba(232,84,32,0.7) 45%, rgba(255,178,122,0.55) 100%)",
+  // radial bottom-right glow
+  "radial-gradient(90% 70% at 80% 85%, rgba(255,178,122,0.55) 0%, rgba(232,84,32,0.4) 35%, #14080a 80%)",
+  // soft amber dawn
+  "linear-gradient(160deg, #14080a 0%, rgba(232,84,32,0.55) 55%, rgba(255,178,122,0.5) 100%)",
+  // dusk from below
+  "radial-gradient(110% 80% at 50% 110%, rgba(255,122,61,0.6) 0%, rgba(80,30,20,0.75) 50%, #0e0b0a 100%)",
+  // sharp 45° flare
+  "linear-gradient(45deg, rgba(232,84,32,0.75) 0%, rgba(255,178,122,0.45) 55%, #1a0a08 100%)",
+  // smoky ember focus
+  "radial-gradient(70% 55% at 30% 75%, rgba(255,122,61,0.55) 0%, rgba(120,40,20,0.55) 45%, #0e0b0a 90%)",
+  // horizontal split
+  "linear-gradient(90deg, #1a0f0c 0%, rgba(232,84,32,0.55) 50%, #2a1410 100%)",
+  // double radial — sun + ember
+  "radial-gradient(60% 60% at 20% 30%, rgba(255,178,122,0.55) 0%, transparent 60%), radial-gradient(70% 70% at 75% 80%, rgba(232,84,32,0.6) 0%, #14080a 70%)",
+  // vertical sunrise
+  "linear-gradient(180deg, #3a1a0a 0%, rgba(232,84,32,0.6) 60%, rgba(255,178,122,0.5) 100%)",
+  // off-center bloom
+  "radial-gradient(80% 60% at 65% 35%, rgba(255,122,61,0.7) 0%, rgba(58,26,10,0.85) 55%, #0e0b0a 100%)",
+  // 220° depth
+  "linear-gradient(220deg, rgba(255,178,122,0.5) 0%, rgba(232,84,32,0.55) 45%, #141110 100%)",
+];
+
+let gradientCursor = 0;
+export function gradientForType(_type: GenType): string {
+  // round-robin through warm pool — guarantees no two adjacent cards repeat
+  const g = WARM_GRADIENTS[gradientCursor % WARM_GRADIENTS.length];
+  gradientCursor += 1;
+  return g;
+}
+
+const NOW = Date.now();
+const minutesAgo = (m: number) => new Date(NOW - m * 60_000);
+const hoursAgo = (h: number) => new Date(NOW - h * 3_600_000);
+const daysAgo = (d: number) => new Date(NOW - d * 86_400_000);
+
+// Pre-pick gradients for mock data (deterministic order)
+const G = WARM_GRADIENTS;
 
 export const MOCK_GENERATIONS: Generation[] = [
   // ─── TEXT ───
@@ -32,7 +67,7 @@ export const MOCK_GENERATIONS: Generation[] = [
     modelName: "GPT-4o",
     credits: 5,
     prompt: "Напиши короткое стихотворение про закат над морем",
-    createdAt: "2 мин назад",
+    createdAt: minutesAgo(2),
     text: "Закат расплавил горизонт,\nВ воде дрожит янтарный мост.\nИ чайки чертят над волной\nПоследний вальс перед звездой.",
   },
   {
@@ -42,7 +77,7 @@ export const MOCK_GENERATIONS: Generation[] = [
     modelName: "Claude Sonnet 4.5",
     credits: 8,
     prompt: "Объясни простыми словами, что такое квантовая запутанность",
-    createdAt: "12 мин назад",
+    createdAt: minutesAgo(12),
     text: "Представь две монетки, которые всегда падают одной и той же стороной — даже если их разнести на километры. Квантовая запутанность похожа на это: две частицы остаются «связанными», и измерение одной мгновенно говорит о состоянии другой.",
   },
   {
@@ -52,7 +87,7 @@ export const MOCK_GENERATIONS: Generation[] = [
     modelName: "Gemini 2.5 Pro",
     credits: 6,
     prompt: "Слоган для кофейни в стиле минимализма",
-    createdAt: "час назад",
+    createdAt: hoursAgo(1),
     text: "Меньше слов. Больше кофе.",
   },
 
@@ -64,8 +99,8 @@ export const MOCK_GENERATIONS: Generation[] = [
     modelName: "Nano Banana",
     credits: 30,
     prompt: "Кинематографичный портрет: воин на закате, песчаная буря, золотой свет",
-    createdAt: "5 мин назад",
-    gradient: GRADIENTS.hero,
+    createdAt: minutesAgo(5),
+    gradient: G[0],
     aspect: "1:1",
   },
   {
@@ -75,8 +110,8 @@ export const MOCK_GENERATIONS: Generation[] = [
     modelName: "Midjourney v7",
     credits: 45,
     prompt: "Архитектура будущего: башня из стекла и меди в пустыне",
-    createdAt: "20 мин назад",
-    gradient: GRADIENTS.amber,
+    createdAt: minutesAgo(20),
+    gradient: G[3],
     aspect: "16:9",
   },
   {
@@ -86,8 +121,8 @@ export const MOCK_GENERATIONS: Generation[] = [
     modelName: "Flux 1.1 Pro",
     credits: 25,
     prompt: "Минималистичный плакат: оранжевый круг на тёмном фоне",
-    createdAt: "вчера",
-    gradient: GRADIENTS.ember,
+    createdAt: daysAgo(1),
+    gradient: G[8],
     aspect: "4:3",
   },
 
@@ -99,8 +134,8 @@ export const MOCK_GENERATIONS: Generation[] = [
     modelName: "Kling 2.5 Turbo",
     credits: 75,
     prompt: "Дрон-облёт горящего костра в горах, закат, медленное движение",
-    createdAt: "8 мин назад",
-    gradient: GRADIENTS.dusk,
+    createdAt: minutesAgo(8),
+    gradient: G[4],
     aspect: "16:9",
     duration: "5s",
   },
@@ -111,8 +146,8 @@ export const MOCK_GENERATIONS: Generation[] = [
     modelName: "Veo 3",
     credits: 120,
     prompt: "Капля чернил растворяется в воде, макросъёмка",
-    createdAt: "30 мин назад",
-    gradient: GRADIENTS.smoke,
+    createdAt: minutesAgo(30),
+    gradient: G[6],
     aspect: "9:16",
     duration: "8s",
   },
@@ -123,8 +158,8 @@ export const MOCK_GENERATIONS: Generation[] = [
     modelName: "Sora 2",
     credits: 150,
     prompt: "Город ночью с высоты птичьего полёта, неоновые огни",
-    createdAt: "2 часа назад",
-    gradient: GRADIENTS.flare,
+    createdAt: hoursAgo(2),
+    gradient: G[10],
     aspect: "16:9",
     duration: "10s",
   },
@@ -137,7 +172,7 @@ export const MOCK_GENERATIONS: Generation[] = [
     modelName: "Suno v4",
     credits: 60,
     prompt: "Эмбиент-трек с тёплыми синтезаторами, медленный темп",
-    createdAt: "15 мин назад",
+    createdAt: minutesAgo(15),
     duration: "2:34",
   },
   {
@@ -147,7 +182,7 @@ export const MOCK_GENERATIONS: Generation[] = [
     modelName: "ElevenLabs v3",
     credits: 40,
     prompt: "Голос рассказчика читает короткое вступление к подкасту",
-    createdAt: "час назад",
+    createdAt: hoursAgo(1),
     duration: "0:48",
   },
   {
@@ -157,16 +192,10 @@ export const MOCK_GENERATIONS: Generation[] = [
     modelName: "Suno v4",
     credits: 60,
     prompt: "Lo-Fi бит для учёбы, мягкие клавиши, винил-шум",
-    createdAt: "вчера",
+    createdAt: daysAgo(1),
     duration: "3:12",
   },
 ];
-
-export function gradientForType(type: GenType): string {
-  const pool = MOCK_GENERATIONS.filter((g) => g.type === type && g.gradient);
-  if (pool.length === 0) return GRADIENTS.hero;
-  return pool[Math.floor(Math.random() * pool.length)].gradient!;
-}
 
 export function defaultModelFor(type: GenType): { providerId: string; modelName: string; credits: number } {
   const first = MOCK_GENERATIONS.find((g) => g.type === type);
