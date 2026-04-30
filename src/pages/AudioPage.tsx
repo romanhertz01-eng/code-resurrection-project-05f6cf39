@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { ChevronDown, Play, Plus, Zap, Settings2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { PillDropdown } from "@/components/workspace/PillDropdown";
+import { WorkspaceTabs } from "@/components/workspace/WorkspaceTabs";
 
 /* ─── Voice data ─── */
 const voices = [
@@ -81,6 +82,8 @@ const AudioPage = () => {
   return (
     <div className="flex flex-col min-h-[calc(100vh-56px)]">
       <div className="flex-1 overflow-y-auto px-4 lg:px-8 py-6 space-y-8 w-full">
+
+        <WorkspaceTabs variant="attached" />
 
         {/* ─── Prompt Block ─── */}
         <div className="rounded-[20px] p-6" style={{ background: "var(--bg-card)", border: "1px solid var(--border-primary)", minHeight: 140 }}>
