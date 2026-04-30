@@ -1,20 +1,21 @@
 import { useState } from "react";
 import { useParams, Link } from "@tanstack/react-router";
-import { ArrowRight, ChevronRight, Play, Heart, Eye } from "lucide-react";
+import { ArrowRight, ChevronRight, Play, Heart, Eye, ZoomIn, Scissors, Wand2, Package, Eraser, RefreshCw, Brush, type LucideIcon } from "lucide-react";
+import { ModelGlyph } from "@/components/ui/era/ModelGlyph";
 import { getToolPageData } from "@/data/toolPages";
 import { FAQ, toolPageItems } from "@/components/shared/FAQ";
 import { Footer } from "@/components/shared/Footer";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 
-const imageTools = [
-  { emoji: "🔍", label: "Масштабирование изображений" },
-  { emoji: "✂️", label: "Удаление фона" },
-  { emoji: "💇", label: "Генерация волос с ИИ" },
-  { emoji: "📦", label: "Распаковать изображения" },
-  { emoji: "🧹", label: "Удалить объект" },
-  { emoji: "🔄", label: "Фото-Обмен лицами" },
-  { emoji: "🧽", label: "ИИ Ластик" },
+const imageTools: { Icon: LucideIcon; label: string }[] = [
+  { Icon: ZoomIn,    label: "Масштабирование изображений" },
+  { Icon: Scissors,  label: "Удаление фона" },
+  { Icon: Wand2,     label: "Генерация волос с ИИ" },
+  { Icon: Package,   label: "Распаковать изображения" },
+  { Icon: Eraser,    label: "Удалить объект" },
+  { Icon: RefreshCw, label: "Фото-Обмен лицами" },
+  { Icon: Brush,     label: "ИИ Ластик" },
 ];
 
 const providerTabs = ["Google", "Flux", "Ideogram", "GPT"];
@@ -201,7 +202,7 @@ const ToolPage = () => {
           {modelCards.map((m) => (
             <div key={m.name} className="bg-card border border-border rounded-xl p-4 hover:border-primary/30 transition-colors cursor-pointer">
               <div className="flex items-center gap-2 mb-2">
-                <span className="w-8 h-8 rounded-lg gradient-accent flex items-center justify-center text-white text-xs">✦</span>
+                <ModelGlyph name={m.name} size={32} />
                 <span className="font-semibold text-sm">{m.name}</span>
                 {m.badge && <span className="text-[9px] gradient-accent text-white px-1.5 py-0.5 rounded-full font-bold">{m.badge}</span>}
               </div>
@@ -220,7 +221,9 @@ const ToolPage = () => {
         <div className="flex gap-4 overflow-x-auto scrollbar-hide pb-2">
           {imageTools.map((t) => (
             <div key={t.label} className="shrink-0 w-[180px] h-[120px] border border-border rounded-xl flex flex-col items-center justify-center gap-3 hover:border-primary/30 hover:bg-accent/50 transition-colors cursor-pointer">
-              <span className="text-2xl">{t.emoji}</span>
+              <div className="w-10 h-10 rounded-[10px] flex items-center justify-center" style={{ background: "rgba(232, 84, 32, 0.1)", border: "1px solid rgba(232, 84, 32, 0.18)" }}>
+                <t.Icon size={20} strokeWidth={1.75} style={{ color: "hsl(var(--primary))" }} />
+              </div>
               <span className="text-[13px] text-center px-3 leading-tight">{t.label}</span>
             </div>
           ))}
