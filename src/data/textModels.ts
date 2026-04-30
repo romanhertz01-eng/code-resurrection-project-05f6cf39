@@ -1,5 +1,8 @@
 // ─── Text model providers & sub-models for /text ───
 
+import type { LucideIcon } from "lucide-react";
+import { PenLine, Lightbulb, Code, Languages, Search, BarChart3 } from "lucide-react";
+
 export interface TextSubModel {
   id: string;
   name: string;
@@ -99,8 +102,8 @@ export const textProviders: TextProvider[] = [
     icon: "⚙️",
     subModels: [
       { id: "qwen-3", name: "Qwen 3", credits: 1, description: "Флагманская языковая модель Alibaba" },
-      { id: "qwen-3-thinking", name: "Qwen 3 Thinking", credits: 2, badge: "🧠 THINK", description: "Версия с пошаговым рассуждением", hasThinking: true },
-      { id: "qwen-3-max-thinking", name: "Qwen 3 Max Thinking", credits: 3, badge: "🏆 🧠", description: "Максимальная мощность + мышление", hasThinking: true },
+      { id: "qwen-3-thinking", name: "Qwen 3 Thinking", credits: 2, badge: "THINK", description: "Версия с пошаговым рассуждением", hasThinking: true },
+      { id: "qwen-3-max-thinking", name: "Qwen 3 Max Thinking", credits: 3, badge: "MAX", description: "Максимальная мощность + мышление", hasThinking: true },
     ],
   },
 ];
@@ -108,19 +111,19 @@ export const textProviders: TextProvider[] = [
 // ─── Quick action cards for welcome screen ───
 
 export interface QuickAction {
-  emoji: string;
+  Icon: LucideIcon;
   title: string;
   description: string;
   prompt: string;
 }
 
 export const textQuickActions: QuickAction[] = [
-  { emoji: "📝", title: "Написать текст", description: "Статья, пост, письмо, сценарий", prompt: "Напиши мне " },
-  { emoji: "💡", title: "Генерация идей", description: "Концепции, названия, слоганы", prompt: "Придумай идеи для " },
-  { emoji: "💻", title: "Написать код", description: "Создам, исправлю, объясню", prompt: "Напиши код: " },
-  { emoji: "🌐", title: "Перевести", description: "На любой язык с сохранением стиля", prompt: "Переведи на английский: " },
-  { emoji: "🔍", title: "Найти ответ", description: "Факты, объяснения, анализ", prompt: "Объясни мне " },
-  { emoji: "📊", title: "Работа с данными", description: "Таблицы, отчёты, данные", prompt: "Проанализируй " },
+  { Icon: PenLine,    title: "Написать текст",   description: "Статья, пост, письмо, сценарий",    prompt: "Напиши мне " },
+  { Icon: Lightbulb,  title: "Генерация идей",   description: "Концепции, названия, слоганы",       prompt: "Придумай идеи для " },
+  { Icon: Code,       title: "Написать код",     description: "Создам, исправлю, объясню",          prompt: "Напиши код: " },
+  { Icon: Languages,  title: "Перевести",        description: "На любой язык с сохранением стиля",  prompt: "Переведи на английский: " },
+  { Icon: Search,     title: "Найти ответ",      description: "Факты, объяснения, анализ",          prompt: "Объясни мне " },
+  { Icon: BarChart3,  title: "Работа с данными", description: "Таблицы, отчёты, данные",            prompt: "Проанализируй " },
 ];
 
 // ─── Helpers ───

@@ -8,7 +8,7 @@ const configs: Record<string, { gradient: [string, string]; symbol: string; symb
   chatgpt: { gradient: ["#10a37f", "#1a7f64"], symbol: "✦", symbolColor: "#fff" },
   claude: { gradient: ["#d97706", "#b45309"], symbol: "✳", symbolColor: "#fff" },
   gemini: { gradient: ["#4285f4", "#1a73e8"], symbol: "✦", symbolColor: "#fff" },
-  deepseek: { gradient: ["#0ea5e9", "#0284c7"], symbol: "🐋", symbolColor: "#fff" },
+  deepseek: { gradient: ["#0ea5e9", "#0284c7"], symbol: "✦", symbolColor: "#fff" },
   grok: { gradient: ["#2a2a3e", "#1a1a2e"], symbol: "✕", symbolColor: "#fff" },
   perplexity: { gradient: ["#14b8a6", "#0d9488"], symbol: "✦", symbolColor: "#fff" },
   qwen: { gradient: ["hsl(var(--primary))", "#4f46e5"], symbol: "✦", symbolColor: "#fff" },
