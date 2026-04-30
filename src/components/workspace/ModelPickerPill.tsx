@@ -54,8 +54,11 @@ export function ModelPickerPill({
   onSelect,
 }: Props) {
   const [open, setOpen] = useState(false);
+  const [pos, setPos] = useState<{ left: number; top?: number; bottom?: number; width: number }>({ left: 0, top: 0, width: 560 });
   const [hoverProviderId, setHoverProviderId] = useState<string | null>(null);
   const ref = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const popupRef = useRef<HTMLDivElement>(null);
 
   const selectedProvider =
     providers.find((p) => p.id === selectedProviderId) || providers[0];
@@ -69,10 +72,37 @@ export function ModelPickerPill({
   useEffect(() => {
     if (!open) return;
     const h = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+      const target = e.target as Node;
+      if (ref.current?.contains(target)) return;
+      if (popupRef.current?.contains(target)) return;
+      setOpen(false);
     };
     document.addEventListener("mousedown", h);
     return () => document.removeEventListener("mousedown", h);
+  }, [open]);
+
+  useEffect(() => {
+    if (!open || !triggerRef.current) return;
+    const compute = () => {
+      const rect = triggerRef.current!.getBoundingClientRect();
+      const width = Math.min(560, window.innerWidth - 16);
+      const dropdownH = 440 + 8;
+      const spaceBelow = window.innerHeight - rect.bottom;
+      const spaceAbove = rect.top;
+      const left = Math.min(Math.max(8, rect.left), window.innerWidth - width - 8);
+      if (spaceBelow < dropdownH && spaceAbove > spaceBelow) {
+        setPos({ left, bottom: window.innerHeight - rect.top + 8, width });
+      } else {
+        setPos({ left, top: rect.bottom + 8, width });
+      }
+    };
+    compute();
+    window.addEventListener("resize", compute);
+    window.addEventListener("scroll", compute, true);
+    return () => {
+      window.removeEventListener("resize", compute);
+      window.removeEventListener("scroll", compute, true);
+    };
   }, [open]);
 
   useEffect(() => {
@@ -84,6 +114,7 @@ export function ModelPickerPill({
   return (
     <div ref={ref} className="relative shrink-0">
       <button
+        ref={triggerRef}
         type="button"
         onClick={() => setOpen(!open)}
         className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-[13px] font-medium transition-colors whitespace-nowrap"
@@ -106,11 +137,14 @@ export function ModelPickerPill({
 
       {open && (
         <div
-          className="absolute top-full left-0 mt-2 rounded-[16px] shadow-2xl z-50 flex overflow-hidden"
+          ref={popupRef}
+          className="fixed rounded-[16px] shadow-2xl z-[100] flex overflow-hidden"
           style={{
+            left: pos.left,
+            ...(pos.top !== undefined ? { top: pos.top } : { bottom: pos.bottom }),
             background: "var(--c-bg-1)",
             border: "1px solid var(--c-line-2)",
-            width: 560,
+            width: pos.width,
             maxHeight: 440,
           }}
         >
