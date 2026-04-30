@@ -56,19 +56,61 @@ function ParamPill({
   mono?: boolean;
 }) {
   const [open, setOpen] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const popupRef = useRef<HTMLDivElement>(null);
+  const [pos, setPos] = useState<{ left: number; top?: number; bottom?: number; width: number }>({
+    left: 0,
+    top: 0,
+    width: 160,
+  });
+
   useEffect(() => {
     if (!open) return;
-    const h = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+
+    const compute = () => {
+      const el = triggerRef.current;
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      const width = Math.max(160, rect.width);
+      const itemH = 32;
+      const height = options.length * itemH + 8;
+      const spaceBelow = window.innerHeight - rect.bottom;
+      const spaceAbove = rect.top;
+      const left = Math.min(
+        Math.max(8, rect.left),
+        window.innerWidth - width - 8,
+      );
+      if (spaceBelow < height + 8 && spaceAbove > spaceBelow) {
+        setPos({ left, bottom: window.innerHeight - rect.top + 6, width });
+      } else {
+        setPos({ left, top: rect.bottom + 6, width });
+      }
     };
-    document.addEventListener("mousedown", h);
-    return () => document.removeEventListener("mousedown", h);
-  }, [open]);
+    compute();
+
+    const onClick = (e: MouseEvent) => {
+      const t = e.target as Node;
+      if (
+        triggerRef.current?.contains(t) ||
+        popupRef.current?.contains(t)
+      )
+        return;
+      setOpen(false);
+    };
+    window.addEventListener("resize", compute);
+    window.addEventListener("scroll", compute, true);
+    document.addEventListener("mousedown", onClick);
+    return () => {
+      window.removeEventListener("resize", compute);
+      window.removeEventListener("scroll", compute, true);
+      document.removeEventListener("mousedown", onClick);
+    };
+  }, [open, options.length]);
 
   return (
-    <div ref={ref} className="relative shrink-0">
+    <div className="relative shrink-0">
       <button
+        ref={triggerRef}
         type="button"
         onClick={() => setOpen(!open)}
         className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[12px] font-medium transition-colors whitespace-nowrap"
@@ -84,8 +126,16 @@ function ParamPill({
       </button>
       {open && (
         <div
-          className="absolute bottom-full left-0 mb-1.5 min-w-[160px] rounded-[12px] shadow-xl z-50 p-1"
-          style={{ background: "var(--c-bg-1)", border: "1px solid var(--c-line-2)" }}
+          ref={popupRef}
+          className="fixed rounded-[12px] shadow-xl z-[100] p-1"
+          style={{
+            left: pos.left,
+            top: pos.top,
+            bottom: pos.bottom,
+            width: pos.width,
+            background: "var(--c-bg-1)",
+            border: "1px solid var(--c-line-2)",
+          }}
         >
           {options.map((o) => (
             <button
@@ -112,6 +162,7 @@ function ParamPill({
     </div>
   );
 }
+
 
 function buildProviders(type: GenType): PickerProvider[] {
   if (type === "image") {
